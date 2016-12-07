@@ -1,5 +1,5 @@
 import React from 'react'
-import {Label, Button, Glyphicon} from 'react-bootstrap'
+import {Label, Button} from 'react-bootstrap'
 
 import TaskDetailsModal from '../modals/taskdetailsmodal'
 
@@ -10,10 +10,6 @@ export default class Task extends React.Component{
             showDetailsModal:false
         }
     }
-    
-    _switchStatus = () => {
-        this.props.switchStatus(this.props.index);
-    };
     
     _showDetailsModal = () => {
         this.setState({
@@ -28,8 +24,7 @@ export default class Task extends React.Component{
     };
     
     render(){
-        const user = this.context.user;
-        const {task, index, switchStatus, selectDeveloper} = this.props;
+        const {task, index, switchStatus, selectDeveloper, saveTags} = this.props;
         
         return(
             <div>
@@ -57,6 +52,7 @@ export default class Task extends React.Component{
                         index={index}
                         switchStatus={switchStatus}
                         selectDeveloper={selectDeveloper}
+                        saveTags={saveTags}
                     />
                 }
             </div>

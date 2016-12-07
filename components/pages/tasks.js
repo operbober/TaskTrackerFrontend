@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from  'react-dom'
-import {Col, Button, Glyphicon, Modal, Form, FormGroup, FormControl, ControlLabel} from 'react-bootstrap'
+import {Col, Button, Glyphicon} from 'react-bootstrap'
 
 import TaskList from '../details/tasklist'
 import AddTaskModal from '../modals/addtaskmodal'
@@ -9,6 +8,7 @@ import getTaskBy from '../../actions/tasks/getTasksBy'
 import addTask from '../../actions/tasks/addTask'
 import switchStatusTask from '../../actions/tasks/swithchStatusTask'
 import selectDeveloperTask from '../../actions/tasks/selectDeveloperTask'
+import saveTags from '../../actions/tags/setTaskTags'
 
 
 export default class Tasks extends React.Component{
@@ -105,6 +105,25 @@ export default class Tasks extends React.Component{
             }
         })
     };
+    
+    _saveTags = (index, tags) => {
+        let {tasks} = this.state;
+        let task = tasks[index];
+        tags = tags.map((tag) => {
+            return {'name' : tag};
+        });
+        task.tags = tags;
+        saveTags(task, (err, task) => {
+            if (err != null){
+                console.log(err);
+            } else {
+                tasks[index] = task;
+                this.setState({
+                    tasks: tasks
+                })
+            }
+        });
+    };
 
     render(){
         var {showAddModal} = this.state;
@@ -121,6 +140,7 @@ export default class Tasks extends React.Component{
                         tasks={this.state.tasks}
                         switchStatus={this._switchStatus}
                         selectDeveloper={this._selectDeveloper}
+                        saveTags = {this._saveTags}
                     />
                 </Col>
                 {

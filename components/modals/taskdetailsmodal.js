@@ -1,5 +1,6 @@
 import React from 'react'
 import {Modal, Well, Label, Button, Glyphicon, Form, FormControl, FormGroup} from 'react-bootstrap'
+import TagsInput from '../details/tagsinput'
 
 import getDevelopers from '../../actions/users/getDevelopers'
 
@@ -35,11 +36,17 @@ export default class TaskDetailsModal extends React.Component{
             : null
         )
     };
+    
+    _saveTags = (tags) => {
+        const {index, saveTags} = this.props;
+        saveTags(index, tags);
+    };
 
     render(){
         const {user} = this.context;
-        const {comments, developers} = this.state;
+        const {developers} = this.state;
         const {show ,close, task}  = this.props;
+        const tags = task.tags.map((tag) => tag.name);
 
         if (developers.length > 0 && user.role && user.role.name === "ROLE_MANAGER") {
             var selectedDeveloperIndex = -1;
@@ -54,7 +61,7 @@ export default class TaskDetailsModal extends React.Component{
             }
 
             var developersOptions = developers.map((developer, index) =>
-                <option key={developer.id} value={index}>{developer.username}</option>
+                <option key={index} value={index}>{developer.username}</option>
             );
             developersOptions.push(<option key="-1" value="-1">not selected</option>);
         }
@@ -74,6 +81,12 @@ export default class TaskDetailsModal extends React.Component{
                         }
                         {" "}
                         Task : {task.name}
+                        <div>
+                            <TagsInput 
+                                tags={tags} 
+                                saveTags={this._saveTags}
+                            />
+                        </div>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -81,8 +94,8 @@ export default class TaskDetailsModal extends React.Component{
                     {
                         user.role.name === "ROLE_MANAGER"
                         ? <Form inline>
-                            Developer:{" "}
-                            <FormGroup bsSize="small">
+                            Developer{' '}:{' '}
+                            <FormGroup bsSize='small'>
                                 <FormControl componentClass="select" value={selectedDeveloperIndex} onChange={this._selectDeveloper}>
                                     {developersOptions}
                                 </FormControl>
@@ -94,7 +107,7 @@ export default class TaskDetailsModal extends React.Component{
                     <Well>{task.description}</Well>
                 </Modal.Body>
                 <Modal.Footer>
-                    Comments
+                    
                 </Modal.Footer>
             </Modal>
         )

@@ -14,6 +14,7 @@ export default class TaskList extends React.Component{
                 index={index}
                 switchStatus={this.props.switchStatus}
                 selectDeveloper={this.props.selectDeveloper}
+                saveTags={this.props.saveTags}
             />
         );
         
