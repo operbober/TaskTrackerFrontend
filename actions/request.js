@@ -12,7 +12,7 @@ const HEADERS = {
     Accept: 'application/json'
 };
 
-const SERVER = "http://localhost:3000";
+const SERVER = "http://192.168.1.16:3000";
 
 var builder = (httpMethod, apiMethod, params) => {
 

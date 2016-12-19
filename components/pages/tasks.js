@@ -3,12 +3,14 @@ import {Col, Button, Glyphicon} from 'react-bootstrap'
 
 import TaskList from '../details/tasklist'
 import AddTaskModal from '../modals/addtaskmodal'
+import Filter from '../details/filter'
 
 import getTaskBy from '../../actions/tasks/getTasksBy'
 import addTask from '../../actions/tasks/addTask'
 import switchStatusTask from '../../actions/tasks/swithchStatusTask'
 import selectDeveloperTask from '../../actions/tasks/selectDeveloperTask'
 import saveTags from '../../actions/tags/setTaskTags'
+import getTaskByTag from '../../actions/tasks/getTasksByTag'
 
 
 export default class Tasks extends React.Component{
@@ -125,6 +127,23 @@ export default class Tasks extends React.Component{
         });
     };
 
+
+    _filterByTag = (tag) => {
+        if (tag){
+            getTaskByTag(tag, (err, tasks) => {
+                if (err != null){
+                    console.log(err);
+                } else {
+                    this.setState({
+                        tasks: tasks
+                    })
+                }
+            })
+        } else {
+            this._getTasks();
+        }
+    };
+
     render(){
         var {showAddModal} = this.state;
         var {projectId} = this.props.params;
@@ -136,6 +155,10 @@ export default class Tasks extends React.Component{
                         Tasks {" "}
                         <Button bsStyle="primary" onClick={this._openAddModal}><Glyphicon glyph="plus"/></Button>
                     </h1>
+                    <Filter
+                        filterField = {'Tag'}
+                        filter = {this._filterByTag}
+                    />
                     <TaskList
                         tasks={this.state.tasks}
                         switchStatus={this._switchStatus}
